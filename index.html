@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pronote — Espace numérique du collège</title>
+<title>Accès aux espaces PRONOTE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
@@ -45,6 +45,16 @@
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--gold-dark);
+  }
+
+  /* ===== BANDEAU D'ANNONCE ===== */
+  .announcement-bar {
+    background: var(--gold);
+    color: var(--ink);
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 20px;
   }
 
   /* ===== EN-TÊTE / SCEAU (élément signature) ===== */
@@ -355,6 +365,30 @@
   }
   #changeCodeBox button:hover { background: var(--ink-soft); }
 
+  .sched-times {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 5px;
+  }
+  .sched-times input[type="time"] {
+    flex: 1;
+    padding: 4px 6px;
+    font-size: 11.5px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+  }
+  .sched-times span { color: var(--text-soft); font-size: 11px; }
+
+  #announceText {
+    width: 100%;
+    margin-top: 6px;
+    padding: 6px 8px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 12px;
+  }
+
   .switch {
     position: relative;
     width: 34px;
@@ -389,6 +423,11 @@
 </style>
 </head>
 <body>
+
+<!-- ===== BANDEAU D'ANNONCE (géré par l'admin) ===== -->
+<div class="announcement-bar" id="announcementBar" hidden>
+  <span id="announcementText"></span>
+</div>
 
 <!-- ===== EN-TÊTE ===== -->
 <header class="hero">
@@ -484,6 +523,13 @@
       <button type="button" id="unblockAllBtn">Tout débloquer</button>
     </div>
 
+    <h3>Annonce</h3>
+    <div class="admin-row-top">
+      <span>Afficher le bandeau</span>
+      <label class="switch"><input type="checkbox" id="announceActive"><span class="track"></span></label>
+    </div>
+    <input type="text" id="announceText" placeholder="Texte de l'annonce">
+
     <div class="admin-row">
       <div class="admin-row-top"><span>Élèves</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="eleve" checked><span class="track"></span></label></div>
       <input type="text" class="admin-msg" data-space="eleve" placeholder="Message si bloqué (optionnel)">
@@ -515,6 +561,36 @@
 
     <h3>Historique récent</h3>
     <ul id="historyList"></ul>
+
+    <h3>Horaires automatiques</h3>
+    <div class="admin-row">
+      <div class="admin-row-top"><span>Élèves</span><label class="switch"><input type="checkbox" class="sched-enable" data-space="eleve"><span class="track"></span></label></div>
+      <div class="sched-times"><input type="time" class="sched-start" data-space="eleve" value="20:00"><span>→</span><input type="time" class="sched-end" data-space="eleve" value="08:00"></div>
+    </div>
+    <div class="admin-row">
+      <div class="admin-row-top"><span>Parents</span><label class="switch"><input type="checkbox" class="sched-enable" data-space="parent"><span class="track"></span></label></div>
+      <div class="sched-times"><input type="time" class="sched-start" data-space="parent" value="22:00"><span>→</span><input type="time" class="sched-end" data-space="parent" value="07:00"></div>
+    </div>
+    <div class="admin-row">
+      <div class="admin-row-top"><span>Professeurs</span><label class="switch"><input type="checkbox" class="sched-enable" data-space="professeur"><span class="track"></span></label></div>
+      <div class="sched-times"><input type="time" class="sched-start" data-space="professeur" value="22:00"><span>→</span><input type="time" class="sched-end" data-space="professeur" value="07:00"></div>
+    </div>
+    <div class="admin-row">
+      <div class="admin-row-top"><span>Vie scolaire</span><label class="switch"><input type="checkbox" class="sched-enable" data-space="viescolaire"><span class="track"></span></label></div>
+      <div class="sched-times"><input type="time" class="sched-start" data-space="viescolaire" value="20:00"><span>→</span><input type="time" class="sched-end" data-space="viescolaire" value="08:00"></div>
+    </div>
+    <div class="admin-row">
+      <div class="admin-row-top"><span>Administration</span><label class="switch"><input type="checkbox" class="sched-enable" data-space="administration"><span class="track"></span></label></div>
+      <div class="sched-times"><input type="time" class="sched-start" data-space="administration" value="20:00"><span>→</span><input type="time" class="sched-end" data-space="administration" value="08:00"></div>
+    </div>
+    <div class="admin-row">
+      <div class="admin-row-top"><span>Entreprise</span><label class="switch"><input type="checkbox" class="sched-enable" data-space="entreprise"><span class="track"></span></label></div>
+      <div class="sched-times"><input type="time" class="sched-start" data-space="entreprise" value="20:00"><span>→</span><input type="time" class="sched-end" data-space="entreprise" value="08:00"></div>
+    </div>
+    <div class="admin-row">
+      <div class="admin-row-top"><span>Académie</span><label class="switch"><input type="checkbox" class="sched-enable" data-space="academie"><span class="track"></span></label></div>
+      <div class="sched-times"><input type="time" class="sched-start" data-space="academie" value="20:00"><span>→</span><input type="time" class="sched-end" data-space="academie" value="08:00"></div>
+    </div>
 
     <h3>Code admin</h3>
     <div id="changeCodeBox">
@@ -561,36 +637,99 @@
 
   const STATUS_DOC = db ? doc(db, "cas", "spacesStatus") : null;
   const ADMIN_DOC = db ? doc(db, "cas", "adminConfig") : null;
+  const SCHEDULE_DOC = db ? doc(db, "cas", "schedules") : null;
   const spaces = document.querySelectorAll("a.space-card[data-space]");
   console.log("[CAS] Firebase prêt :", !!db, "— cartes trouvées :", spaces.length);
 
-  function applyStatus(status) {
-    console.log("[CAS] Statut reçu de Firestore :", JSON.stringify(status));
+  let latestStatus = {};
+  let latestSchedules = {};
+
+  // Fenêtre horaire "HH:MM" → "HH:MM", gère le passage de minuit (ex: 20:00 → 08:00)
+  function isWithinSchedule(sched) {
+    if (!sched || !sched.enabled || !sched.start || !sched.end) return false;
+    const [sh, sm] = sched.start.split(":").map(Number);
+    const [eh, em] = sched.end.split(":").map(Number);
+    const startMin = sh * 60 + sm;
+    const endMin = eh * 60 + em;
+    const now = new Date();
+    const nowMin = now.getHours() * 60 + now.getMinutes();
+    if (startMin === endMin) return false;
+    if (startMin < endMin) return nowMin >= startMin && nowMin < endMin;
+    return nowMin >= startMin || nowMin < endMin;
+  }
+
+  function renderBanner() {
+    const bar = document.getElementById("announcementBar");
+    const txt = document.getElementById("announcementText");
+    const ann = latestStatus && latestStatus.announcement;
+    if (ann && ann.active && ann.text) {
+      txt.textContent = ann.text;
+      bar.hidden = false;
+    } else {
+      bar.hidden = true;
+    }
+    const announceActive = document.getElementById("announceActive");
+    const announceText = document.getElementById("announceText");
+    if (document.activeElement !== announceActive) announceActive.checked = !!(ann && ann.active);
+    if (document.activeElement !== announceText) announceText.value = (ann && ann.text) ? ann.text : "";
+  }
+
+  function renderAll() {
     spaces.forEach(card => {
       const key = card.dataset.space;
-      const blocked = !!(status && status[key]);
+      const manualBlocked = !!(latestStatus && latestStatus[key]);
+      const scheduleBlocked = isWithinSchedule(latestSchedules[key]);
+      const blocked = manualBlocked || scheduleBlocked;
       card.classList.toggle("is-blocked", blocked);
       const msgEl = card.querySelector(".blocked-msg");
-      if (msgEl) msgEl.textContent = (status && status.messages && status.messages[key]) ? status.messages[key] : "Indisponible";
+      if (msgEl) {
+        if (manualBlocked && latestStatus.messages && latestStatus.messages[key]) {
+          msgEl.textContent = latestStatus.messages[key];
+        } else if (scheduleBlocked && !manualBlocked) {
+          msgEl.textContent = "Fermé (horaire)";
+        } else {
+          msgEl.textContent = "Indisponible";
+        }
+      }
     });
     document.querySelectorAll(".admin-toggle").forEach(t => {
       const key = t.dataset.space;
-      t.checked = !(status && status[key]);
+      t.checked = !(latestStatus && latestStatus[key]);
     });
     document.querySelectorAll(".admin-msg").forEach(m => {
       const key = m.dataset.space;
-      const val = (status && status.messages && status.messages[key]) ? status.messages[key] : "";
+      const val = (latestStatus && latestStatus.messages && latestStatus.messages[key]) ? latestStatus.messages[key] : "";
       if (document.activeElement !== m) m.value = val;
     });
+    renderBanner();
   }
+
+  // Re-vérifie les horaires toutes les 60s même si aucune donnée Firestore ne change
+  setInterval(renderAll, 60000);
 
   if (STATUS_DOC) {
     onSnapshot(STATUS_DOC, (snap) => {
       console.log("[CAS] onSnapshot déclenché, document existe :", snap.exists(), "— pendingWrites :", snap.metadata.hasPendingWrites);
-      applyStatus(snap.exists() ? snap.data() : {});
+      latestStatus = snap.exists() ? snap.data() : {};
+      renderAll();
     }, (err) => console.error("[CAS] Lecture Firestore impossible :", err));
   } else {
     console.warn("[CAS] STATUS_DOC est null — Firebase non initialisé.");
+  }
+
+  if (SCHEDULE_DOC) {
+    onSnapshot(SCHEDULE_DOC, (snap) => {
+      latestSchedules = snap.exists() ? snap.data() : {};
+      document.querySelectorAll(".sched-enable, .sched-start, .sched-end").forEach(el => {
+        const key = el.dataset.space;
+        const sched = latestSchedules[key];
+        if (!sched || document.activeElement === el) return;
+        if (el.classList.contains("sched-enable")) el.checked = !!sched.enabled;
+        if (el.classList.contains("sched-start") && sched.start) el.value = sched.start;
+        if (el.classList.contains("sched-end") && sched.end) el.value = sched.end;
+      });
+      renderAll();
+    }, (err) => console.warn("[CAS] Lecture horaires impossible :", err));
   }
 
   if (ADMIN_DOC) {
@@ -711,6 +850,37 @@
       console.error("[CAS] Erreur changement code :", err);
       alert("Erreur lors du changement de code.");
     }
+  });
+
+  // ===== ANNONCE =====
+  async function saveAnnouncement() {
+    if (!isAdmin || !STATUS_DOC) return;
+    const active = document.getElementById("announceActive").checked;
+    const text = document.getElementById("announceText").value;
+    try {
+      await setDoc(STATUS_DOC, { announcement: { active, text } }, { merge: true });
+    } catch (err) {
+      console.error("[CAS] Erreur d'écriture annonce :", err);
+    }
+  }
+  document.getElementById("announceActive").addEventListener("change", saveAnnouncement);
+  document.getElementById("announceText").addEventListener("change", saveAnnouncement);
+
+  // ===== HORAIRES AUTOMATIQUES =====
+  Object.keys(SPACE_LABELS).forEach(key => {
+    const enableEl = document.querySelector(`.sched-enable[data-space="${key}"]`);
+    const startEl = document.querySelector(`.sched-start[data-space="${key}"]`);
+    const endEl = document.querySelector(`.sched-end[data-space="${key}"]`);
+    async function saveSchedule() {
+      if (!isAdmin || !SCHEDULE_DOC) return;
+      try {
+        await setDoc(SCHEDULE_DOC, { [key]: { enabled: enableEl.checked, start: startEl.value, end: endEl.value } }, { merge: true });
+        renderAll();
+      } catch (err) {
+        console.error("[CAS] Erreur d'écriture horaire :", err);
+      }
+    }
+    [enableEl, startEl, endEl].forEach(el => el.addEventListener("change", saveSchedule));
   });
 </script>
 
