@@ -194,11 +194,10 @@
   .space-card.is-blocked .space-go {
     color: var(--blocked-text);
   }
-  .space-card.is-blocked .space-go::after {
-    content: "Indisponible";
-  }
   .space-card.is-blocked .space-go svg,
   .space-card.is-blocked .space-go .go-label { display: none; }
+  .blocked-msg { display: none; }
+  .space-card.is-blocked .blocked-msg { display: inline; }
 
   footer {
     text-align: center;
@@ -231,7 +230,9 @@
     position: fixed;
     left: 16px;
     bottom: 58px;
-    width: 240px;
+    width: 290px;
+    max-height: 78vh;
+    overflow-y: auto;
     background: var(--paper-card);
     border: 1px solid var(--line);
     border-radius: 12px;
@@ -249,8 +250,9 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-soft);
-    margin: 0 0 10px;
+    margin: 16px 0 10px;
   }
+  #adminPanel h3:first-child { margin-top: 0; }
 
   #adminCodeForm input {
     width: 100%;
@@ -278,14 +280,80 @@
   }
 
   .admin-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     padding: 7px 0;
     border-bottom: 1px solid var(--line);
   }
   .admin-row:last-child { border-bottom: none; }
-  .admin-row span { color: var(--text); }
+  .admin-row-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .admin-row-top span { color: var(--text); }
+  .admin-msg {
+    width: 100%;
+    margin-top: 5px;
+    padding: 5px 8px;
+    font-size: 11.5px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--text-soft);
+  }
+
+  .bulk-actions {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .bulk-actions button {
+    flex: 1;
+    padding: 7px 4px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--paper);
+    font-size: 11.5px;
+    cursor: pointer;
+    color: var(--text);
+  }
+  .bulk-actions button:hover { border-color: var(--gold); }
+
+  #historyList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 140px;
+    overflow-y: auto;
+    font-size: 11px;
+    color: var(--text-soft);
+  }
+  #historyList li {
+    padding: 5px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  #historyList li:last-child { border-bottom: none; }
+  #historyList:empty::before {
+    content: "Aucune action pour le moment.";
+    color: var(--blocked-text);
+  }
+
+  #changeCodeBox { display: flex; gap: 6px; }
+  #changeCodeBox input {
+    flex: 1;
+    padding: 6px 8px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 12px;
+  }
+  #changeCodeBox button {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 8px;
+    background: var(--ink);
+    color: #fff;
+    font-size: 11.5px;
+    cursor: pointer;
+  }
+  #changeCodeBox button:hover { background: var(--ink-soft); }
 
   .switch {
     position: relative;
@@ -344,49 +412,49 @@
       <div class="space-icon"><svg viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4H20v14H6.5A2.5 2.5 0 0 0 4 20.5V6.5z"/><path d="M4 6.5A2.5 2.5 0 0 0 6.5 9H20"/></svg></div>
       <div class="space-name">Élèves</div>
       <div class="space-desc">Accès aux notes, à l'emploi du temps et aux devoirs.</div>
-      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="blocked-msg">Indisponible</span></div>
     </a>
 
     <a class="space-card" data-space="parent" href="http://desktop-f416j0f/pronote/parent.html?login=true">
       <div class="space-icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="8" r="2.4"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M14.5 14.7c2.6.2 4.5 2.2 4.5 5.3"/></svg></div>
       <div class="space-name">Parents</div>
       <div class="space-desc">Suivi de la scolarité et messagerie avec l'équipe éducative.</div>
-      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="blocked-msg">Indisponible</span></div>
     </a>
 
     <a class="space-card" data-space="professeur" href="http://desktop-f416j0f/pronote/professeur.html?login=true">
       <div class="space-icon"><svg viewBox="0 0 24 24"><path d="M4 19V6a2 2 0 0 1 2-2h9l5 5v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M14 4v5h5"/></svg></div>
       <div class="space-name">Professeurs</div>
       <div class="space-desc">Cahier de textes, appel, notes et bulletins.</div>
-      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="blocked-msg">Indisponible</span></div>
     </a>
 
     <a class="space-card" data-space="viescolaire" href="http://desktop-f416j0f/pronote/viescolaire.html?login=true">
       <div class="space-icon"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></div>
       <div class="space-name">Vie scolaire</div>
       <div class="space-desc">Absences, retards, sanctions et vie de l'établissement.</div>
-      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="blocked-msg">Indisponible</span></div>
     </a>
 
     <a class="space-card" data-space="administration" href="http://desktop-f416j0f/pronote/direction.html?login=true">
       <div class="space-icon"><svg viewBox="0 0 24 24"><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-6h6v6"/></svg></div>
       <div class="space-name">Administration</div>
       <div class="space-desc">Direction et gestion administrative de l'établissement.</div>
-      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="blocked-msg">Indisponible</span></div>
     </a>
 
     <a class="space-card" data-space="entreprise" href="http://desktop-f416j0f/pronote/entreprise.html?login=true">
       <div class="space-icon"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div>
       <div class="space-name">Entreprise</div>
       <div class="space-desc">Accompagnants et partenaires professionnels (stages).</div>
-      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="blocked-msg">Indisponible</span></div>
     </a>
 
     <a class="space-card" data-space="academie" href="http://desktop-f416j0f/pronote/academie.html">
       <div class="space-icon"><svg viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 10-5-10-5z"/><path d="M6 10.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-5.5"/></svg></div>
       <div class="space-name">Académie</div>
       <div class="space-desc">Accès pour les services académiques.</div>
-      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="blocked-msg">Indisponible</span></div>
     </a>
 
   </div>
@@ -411,23 +479,60 @@
   </div>
 
   <div id="adminControls" hidden>
-    <div class="admin-row"><span>Élèves</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="eleve" checked><span class="track"></span></label></div>
-    <div class="admin-row"><span>Parents</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="parent" checked><span class="track"></span></label></div>
-    <div class="admin-row"><span>Professeurs</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="professeur" checked><span class="track"></span></label></div>
-    <div class="admin-row"><span>Vie scolaire</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="viescolaire" checked><span class="track"></span></label></div>
-    <div class="admin-row"><span>Administration</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="administration" checked><span class="track"></span></label></div>
-    <div class="admin-row"><span>Entreprise</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="entreprise" checked><span class="track"></span></label></div>
-    <div class="admin-row"><span>Académie</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="academie" checked><span class="track"></span></label></div>
+    <div class="bulk-actions">
+      <button type="button" id="blockAllBtn">Tout bloquer</button>
+      <button type="button" id="unblockAllBtn">Tout débloquer</button>
+    </div>
+
+    <div class="admin-row">
+      <div class="admin-row-top"><span>Élèves</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="eleve" checked><span class="track"></span></label></div>
+      <input type="text" class="admin-msg" data-space="eleve" placeholder="Message si bloqué (optionnel)">
+    </div>
+    <div class="admin-row">
+      <div class="admin-row-top"><span>Parents</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="parent" checked><span class="track"></span></label></div>
+      <input type="text" class="admin-msg" data-space="parent" placeholder="Message si bloqué (optionnel)">
+    </div>
+    <div class="admin-row">
+      <div class="admin-row-top"><span>Professeurs</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="professeur" checked><span class="track"></span></label></div>
+      <input type="text" class="admin-msg" data-space="professeur" placeholder="Message si bloqué (optionnel)">
+    </div>
+    <div class="admin-row">
+      <div class="admin-row-top"><span>Vie scolaire</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="viescolaire" checked><span class="track"></span></label></div>
+      <input type="text" class="admin-msg" data-space="viescolaire" placeholder="Message si bloqué (optionnel)">
+    </div>
+    <div class="admin-row">
+      <div class="admin-row-top"><span>Administration</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="administration" checked><span class="track"></span></label></div>
+      <input type="text" class="admin-msg" data-space="administration" placeholder="Message si bloqué (optionnel)">
+    </div>
+    <div class="admin-row">
+      <div class="admin-row-top"><span>Entreprise</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="entreprise" checked><span class="track"></span></label></div>
+      <input type="text" class="admin-msg" data-space="entreprise" placeholder="Message si bloqué (optionnel)">
+    </div>
+    <div class="admin-row">
+      <div class="admin-row-top"><span>Académie</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="academie" checked><span class="track"></span></label></div>
+      <input type="text" class="admin-msg" data-space="academie" placeholder="Message si bloqué (optionnel)">
+    </div>
+
+    <h3>Historique récent</h3>
+    <ul id="historyList"></ul>
+
+    <h3>Code admin</h3>
+    <div id="changeCodeBox">
+      <input type="text" id="newAdminCode" placeholder="Nouveau code">
+      <button type="button" id="saveAdminCode">Changer</button>
+    </div>
   </div>
 </div>
 
 <!-- ===== SCRIPT ===== -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import {
+    getFirestore, doc, onSnapshot, setDoc,
+    collection, addDoc, query, orderBy, limit, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   // ===== CONFIGURATION FIREBASE — À REMPLACER =====
-  // Recherchez "COLLEZ_VOTRE" avec Ctrl+F pour trouver les 6 valeurs à remplacer.
   const firebaseConfig = {
     apiKey: "AIzaSyBRLiG9rRewYjyKj7iXqV1hDac0ZAKMYr8",
     authDomain: "pageconnexion-pronote.firebaseapp.com",
@@ -437,44 +542,92 @@
     appId: "1:823532302709:web:688964464b8d4cb1e8633c"
   };
 
-  // ===== CODE ADMIN — recherchez "changeMoi2026" avec Ctrl+F pour le changer =====
-  const ADMIN_CODE = "changeMoi2026";
+  // ===== CODE ADMIN PAR DÉFAUT — utilisé tant qu'aucun code n'a été enregistré dans Firestore =====
+  let currentAdminCode = "changeMoi2026";
+
+  const SPACE_LABELS = {
+    eleve: "Élèves", parent: "Parents", professeur: "Professeurs",
+    viescolaire: "Vie scolaire", administration: "Administration",
+    entreprise: "Entreprise", academie: "Académie"
+  };
 
   let db = null;
   try {
     const app = initializeApp(firebaseConfig);
     db = getFirestore(app);
   } catch (e) {
-    console.warn("Firebase non configuré :", e);
+    console.warn("[CAS] Firebase non configuré :", e);
   }
 
   const STATUS_DOC = db ? doc(db, "cas", "spacesStatus") : null;
-  const spaces = document.querySelectorAll("[data-space]");
+  const ADMIN_DOC = db ? doc(db, "cas", "adminConfig") : null;
+  const spaces = document.querySelectorAll("a.space-card[data-space]");
+  console.log("[CAS] Firebase prêt :", !!db, "— cartes trouvées :", spaces.length);
 
   function applyStatus(status) {
+    console.log("[CAS] Statut reçu de Firestore :", JSON.stringify(status));
     spaces.forEach(card => {
       const key = card.dataset.space;
       const blocked = !!(status && status[key]);
       card.classList.toggle("is-blocked", blocked);
+      const msgEl = card.querySelector(".blocked-msg");
+      if (msgEl) msgEl.textContent = (status && status.messages && status.messages[key]) ? status.messages[key] : "Indisponible";
     });
     document.querySelectorAll(".admin-toggle").forEach(t => {
       const key = t.dataset.space;
       t.checked = !(status && status[key]);
     });
+    document.querySelectorAll(".admin-msg").forEach(m => {
+      const key = m.dataset.space;
+      const val = (status && status.messages && status.messages[key]) ? status.messages[key] : "";
+      if (document.activeElement !== m) m.value = val;
+    });
   }
 
   if (STATUS_DOC) {
     onSnapshot(STATUS_DOC, (snap) => {
+      console.log("[CAS] onSnapshot déclenché, document existe :", snap.exists(), "— pendingWrites :", snap.metadata.hasPendingWrites);
       applyStatus(snap.exists() ? snap.data() : {});
-    }, (err) => console.warn("Lecture Firestore impossible :", err));
+    }, (err) => console.error("[CAS] Lecture Firestore impossible :", err));
+  } else {
+    console.warn("[CAS] STATUS_DOC est null — Firebase non initialisé.");
   }
 
-  // Empêche l'ouverture d'un espace bloqué (sécurité supplémentaire au-delà du CSS)
+  if (ADMIN_DOC) {
+    onSnapshot(ADMIN_DOC, (snap) => {
+      if (snap.exists() && snap.data().code) currentAdminCode = snap.data().code;
+    }, (err) => console.warn("[CAS] Lecture code admin impossible :", err));
+  }
+
   spaces.forEach(card => {
     card.addEventListener("click", (e) => {
       if (card.classList.contains("is-blocked")) e.preventDefault();
     });
   });
+
+  async function logHistory(space, action) {
+    if (!db) return;
+    try {
+      await addDoc(collection(db, "casHistorique"), { space, action, date: serverTimestamp() });
+    } catch (e) {
+      console.warn("[CAS] Historique non enregistré :", e);
+    }
+  }
+
+  if (db) {
+    const q = query(collection(db, "casHistorique"), orderBy("date", "desc"), limit(10));
+    onSnapshot(q, (snap) => {
+      const list = document.getElementById("historyList");
+      list.innerHTML = "";
+      snap.forEach(d => {
+        const data = d.data();
+        const li = document.createElement("li");
+        const when = data.date ? data.date.toDate().toLocaleString("fr-FR") : "à l'instant";
+        li.textContent = (SPACE_LABELS[data.space] || data.space) + " — " + data.action + " — " + when;
+        list.appendChild(li);
+      });
+    }, (err) => console.warn("[CAS] Historique illisible :", err));
+  }
 
   // ===== PANNEAU ADMIN =====
   const adminBtn = document.getElementById("adminBtn");
@@ -489,7 +642,7 @@
 
   document.getElementById("adminCodeForm").addEventListener("submit", (e) => {
     e.preventDefault();
-    if (adminCodeInput.value === ADMIN_CODE) {
+    if (adminCodeInput.value === currentAdminCode) {
       isAdmin = true;
       adminLogin.hidden = true;
       adminControls.hidden = false;
@@ -502,16 +655,62 @@
 
   document.querySelectorAll(".admin-toggle").forEach(toggle => {
     toggle.addEventListener("change", async () => {
-      if (!isAdmin) return;
-      if (!STATUS_DOC) { alert("Firebase n'est pas configuré : complétez firebaseConfig en haut du script."); return; }
+      console.log("[CAS] Clic interrupteur —", toggle.dataset.space, "— coché après clic :", toggle.checked, "— isAdmin :", isAdmin);
+      if (!isAdmin) { console.warn("[CAS] Ignoré : pas authentifié comme admin."); return; }
+      if (!STATUS_DOC) { alert("Firebase n'est pas configuré."); return; }
       const key = toggle.dataset.space;
+      const blocked = !toggle.checked;
       try {
-        await setDoc(STATUS_DOC, { [key]: !toggle.checked }, { merge: true });
+        await setDoc(STATUS_DOC, { [key]: blocked }, { merge: true });
+        console.log("[CAS] Écriture réussie —", key, "→ bloqué :", blocked);
+        await logHistory(key, blocked ? "bloqué" : "débloqué");
       } catch (err) {
-        alert("Erreur d'écriture Firestore : vérifiez la configuration et les règles de sécurité.");
-        console.error(err);
+        console.error("[CAS] Erreur d'écriture Firestore :", err);
+        alert("Erreur d'écriture Firestore : vérifiez les règles de sécurité.");
       }
     });
+  });
+
+  document.querySelectorAll(".admin-msg").forEach(input => {
+    input.addEventListener("change", async () => {
+      if (!isAdmin || !STATUS_DOC) return;
+      const key = input.dataset.space;
+      try {
+        await setDoc(STATUS_DOC, { messages: { [key]: input.value } }, { mergeFields: [`messages.${key}`] });
+      } catch (err) {
+        console.error("[CAS] Erreur d'écriture du message :", err);
+      }
+    });
+  });
+
+  document.getElementById("blockAllBtn").addEventListener("click", async () => {
+    if (!isAdmin || !STATUS_DOC) return;
+    const payload = {};
+    Object.keys(SPACE_LABELS).forEach(k => payload[k] = true);
+    await setDoc(STATUS_DOC, payload, { merge: true });
+    await logHistory("Tous les espaces", "bloqué");
+  });
+
+  document.getElementById("unblockAllBtn").addEventListener("click", async () => {
+    if (!isAdmin || !STATUS_DOC) return;
+    const payload = {};
+    Object.keys(SPACE_LABELS).forEach(k => payload[k] = false);
+    await setDoc(STATUS_DOC, payload, { merge: true });
+    await logHistory("Tous les espaces", "débloqué");
+  });
+
+  document.getElementById("saveAdminCode").addEventListener("click", async () => {
+    if (!isAdmin || !ADMIN_DOC) return;
+    const val = document.getElementById("newAdminCode").value.trim();
+    if (!val) return;
+    try {
+      await setDoc(ADMIN_DOC, { code: val }, { merge: true });
+      alert("Code admin changé.");
+      document.getElementById("newAdminCode").value = "";
+    } catch (err) {
+      console.error("[CAS] Erreur changement code :", err);
+      alert("Erreur lors du changement de code.");
+    }
   });
 </script>
 
