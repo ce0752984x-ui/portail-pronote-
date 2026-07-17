@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pronote — Espace numérique du collège</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+  /* ===== JETONS DE DESIGN ===== */
+  :root {
+    --ink: #16213E;          /* bleu encre - registre scolaire */
+    --ink-soft: #2C3B63;
+    --paper: #F3F5F4;        /* blanc froid, papier */
+    --paper-card: #FFFFFF;
+    --gold: #C89B3C;         /* cachet doré */
+    --gold-dark: #9C7A2A;
+    --line: #DCE0E3;
+    --text: #1B2438;
+    --text-soft: #5B6478;
+    --blocked-bg: #E7E8EA;
+    --blocked-text: #9AA1AC;
+    --blocked-line: #C7CBD1;
+    --radius: 14px;
+    --shadow: 0 10px 30px rgba(22, 33, 62, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { text-decoration: none; color: inherit; }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+  }
+
+  /* ===== EN-TÊTE / SCEAU (élément signature) ===== */
+  header.hero {
+    background: linear-gradient(180deg, var(--ink) 0%, var(--ink-soft) 100%);
+    color: #fff;
+    padding: 64px 24px 88px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .seal {
+    width: 92px;
+    height: 92px;
+    margin: 0 auto 22px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: transform 0.5s ease;
+  }
+  .seal:hover { transform: rotate(-8deg); }
+  .seal::before {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border: 1px solid rgba(200,155,60,0.55);
+    border-radius: 50%;
+  }
+  .seal svg { width: 34px; height: 34px; fill: var(--gold); }
+
+  header.hero h1 {
+    font-family: 'Newsreader', serif;
+    font-weight: 500;
+    font-size: clamp(28px, 4vw, 40px);
+    margin: 0 0 8px;
+    letter-spacing: 0.01em;
+  }
+
+  header.hero p.subtitle {
+    color: #C6CBDA;
+    font-size: 15px;
+    margin: 0;
+  }
+
+  /* ===== NOM DE L'ÉTABLISSEMENT — remplacez ici via Ctrl+F "VOTRE COLLÈGE" ===== */
+
+  /* ===== GRILLE DES ESPACES ===== */
+  main {
+    max-width: 980px;
+    margin: -48px auto 0;
+    padding: 0 24px 80px;
+    position: relative;
+  }
+
+  .section-label {
+    text-align: center;
+    margin-bottom: 26px;
+  }
+  .section-label .eyebrow { display: block; margin-bottom: 6px; }
+  .section-label h2 {
+    font-family: 'Newsreader', serif;
+    font-weight: 500;
+    font-size: 22px;
+    margin: 0;
+    color: var(--ink);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 16px;
+  }
+
+  .space-card {
+    background: var(--paper-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: var(--shadow);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+  .space-card:not(.is-blocked):hover {
+    transform: translateY(-3px);
+    border-color: var(--gold);
+  }
+  .space-card:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
+
+  .space-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(200,155,60,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .space-icon svg { width: 20px; height: 20px; stroke: var(--gold-dark); fill: none; stroke-width: 1.6; }
+
+  .space-name {
+    font-family: 'Newsreader', serif;
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .space-desc {
+    font-size: 13px;
+    color: var(--text-soft);
+    line-height: 1.45;
+    flex-grow: 1;
+  }
+
+  .space-go {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .space-go svg { width: 13px; height: 13px; stroke: var(--gold-dark); fill: none; stroke-width: 2; transition: transform 0.18s ease; }
+  .space-card:hover .space-go svg { transform: translateX(3px); }
+
+  /* ===== ÉTAT BLOQUÉ (géré par l'admin) ===== */
+  .space-card.is-blocked {
+    background: var(--blocked-bg);
+    border-color: var(--blocked-line);
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+  .space-card.is-blocked .space-icon { background: rgba(154,161,172,0.18); }
+  .space-card.is-blocked .space-icon svg { stroke: var(--blocked-text); }
+  .space-card.is-blocked .space-name,
+  .space-card.is-blocked .space-desc { color: var(--blocked-text); }
+  .space-card.is-blocked .space-go {
+    color: var(--blocked-text);
+  }
+  .space-card.is-blocked .space-go::after {
+    content: "Indisponible";
+  }
+  .space-card.is-blocked .space-go svg,
+  .space-card.is-blocked .space-go .go-label { display: none; }
+
+  footer {
+    text-align: center;
+    padding: 10px 20px 60px;
+    font-size: 12px;
+    color: var(--text-soft);
+  }
+
+  /* ===== PANNEAU ADMIN (discret, bas-gauche) ===== */
+  .admin-toggle-btn {
+    position: fixed;
+    left: 16px;
+    bottom: 16px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(22,33,62,0.06);
+    border: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 40;
+    transition: background 0.15s ease;
+  }
+  .admin-toggle-btn:hover { background: rgba(22,33,62,0.12); }
+  .admin-toggle-btn svg { width: 15px; height: 15px; stroke: var(--text-soft); fill: none; stroke-width: 1.6; }
+
+  #adminPanel {
+    position: fixed;
+    left: 16px;
+    bottom: 58px;
+    width: 240px;
+    background: var(--paper-card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 16px;
+    z-index: 40;
+    display: none;
+    font-size: 13px;
+  }
+  #adminPanel.open { display: block; }
+
+  #adminPanel h3 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin: 0 0 10px;
+  }
+
+  #adminCodeForm input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+  #adminCodeForm button {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    background: var(--ink);
+    color: #fff;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  #adminCodeForm button:hover { background: var(--ink-soft); }
+  #adminCodeError {
+    color: #B23A48;
+    font-size: 12px;
+    margin: 6px 0 0;
+  }
+
+  .admin-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .admin-row:last-child { border-bottom: none; }
+  .admin-row span { color: var(--text); }
+
+  .switch {
+    position: relative;
+    width: 34px;
+    height: 19px;
+    display: inline-block;
+  }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .switch .track {
+    position: absolute;
+    inset: 0;
+    background: var(--blocked-line);
+    border-radius: 20px;
+    transition: background 0.15s ease;
+  }
+  .switch .track::before {
+    content: "";
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    left: 2px;
+    top: 2px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.15s ease;
+  }
+  .switch input:checked + .track { background: var(--gold); }
+  .switch input:checked + .track::before { transform: translateX(15px); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== EN-TÊTE ===== -->
+<header class="hero">
+  <div class="seal">
+    <svg viewBox="0 0 24 24"><path d="M12 2 3 6v6c0 5 4 8 9 10 5-2 9-5 9-10V6l-9-4z"/></svg>
+  </div>
+  <h1>VOTRE COLLÈGE</h1>
+  <p class="subtitle">Portail de connexion à Pronote</p>
+</header>
+
+<!-- ===== ESPACES DE CONNEXION ===== -->
+<main>
+  <div class="section-label">
+    <span class="eyebrow">Se connecter</span>
+    <h2>Choisissez votre espace</h2>
+  </div>
+
+  <div class="grid">
+
+    <a class="space-card" data-space="eleve" href="http://desktop-f416j0f/pronote/eleve.html?login=true">
+      <div class="space-icon"><svg viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4H20v14H6.5A2.5 2.5 0 0 0 4 20.5V6.5z"/><path d="M4 6.5A2.5 2.5 0 0 0 6.5 9H20"/></svg></div>
+      <div class="space-name">Élèves</div>
+      <div class="space-desc">Accès aux notes, à l'emploi du temps et aux devoirs.</div>
+      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </a>
+
+    <a class="space-card" data-space="parent" href="http://desktop-f416j0f/pronote/parent.html?login=true">
+      <div class="space-icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="8" r="2.4"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M14.5 14.7c2.6.2 4.5 2.2 4.5 5.3"/></svg></div>
+      <div class="space-name">Parents</div>
+      <div class="space-desc">Suivi de la scolarité et messagerie avec l'équipe éducative.</div>
+      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </a>
+
+    <a class="space-card" data-space="professeur" href="http://desktop-f416j0f/pronote/professeur.html?login=true">
+      <div class="space-icon"><svg viewBox="0 0 24 24"><path d="M4 19V6a2 2 0 0 1 2-2h9l5 5v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M14 4v5h5"/></svg></div>
+      <div class="space-name">Professeurs</div>
+      <div class="space-desc">Cahier de textes, appel, notes et bulletins.</div>
+      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </a>
+
+    <a class="space-card" data-space="viescolaire" href="http://desktop-f416j0f/pronote/viescolaire.html?login=true">
+      <div class="space-icon"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></div>
+      <div class="space-name">Vie scolaire</div>
+      <div class="space-desc">Absences, retards, sanctions et vie de l'établissement.</div>
+      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </a>
+
+    <a class="space-card" data-space="administration" href="http://desktop-f416j0f/pronote/direction.html?login=true">
+      <div class="space-icon"><svg viewBox="0 0 24 24"><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-6h6v6"/></svg></div>
+      <div class="space-name">Administration</div>
+      <div class="space-desc">Direction et gestion administrative de l'établissement.</div>
+      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </a>
+
+    <a class="space-card" data-space="entreprise" href="http://desktop-f416j0f/pronote/entreprise.html?login=true">
+      <div class="space-icon"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div>
+      <div class="space-name">Entreprise</div>
+      <div class="space-desc">Accompagnants et partenaires professionnels (stages).</div>
+      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </a>
+
+    <a class="space-card" data-space="academie" href="http://desktop-f416j0f/pronote/academie.html">
+      <div class="space-icon"><svg viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 10-5-10-5z"/><path d="M6 10.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-5.5"/></svg></div>
+      <div class="space-name">Académie</div>
+      <div class="space-desc">Accès pour les services académiques.</div>
+      <div class="space-go"><span class="go-label">Se connecter</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </a>
+
+  </div>
+</main>
+
+<footer>Portail interne — connexion réservée aux membres de l'établissement.</footer>
+
+<!-- ===== BOUTON + PANNEAU ADMIN ===== -->
+<div class="admin-toggle-btn" id="adminBtn" title="Espace administrateur">
+  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.6 1z"/></svg>
+</div>
+
+<div id="adminPanel">
+  <h3>Espace administrateur</h3>
+
+  <div id="adminLogin">
+    <form id="adminCodeForm">
+      <input type="password" id="adminCodeInput" placeholder="Code admin" autocomplete="off" required>
+      <button type="submit">Valider</button>
+    </form>
+    <p id="adminCodeError" hidden>Code incorrect.</p>
+  </div>
+
+  <div id="adminControls" hidden>
+    <div class="admin-row"><span>Élèves</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="eleve" checked><span class="track"></span></label></div>
+    <div class="admin-row"><span>Parents</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="parent" checked><span class="track"></span></label></div>
+    <div class="admin-row"><span>Professeurs</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="professeur" checked><span class="track"></span></label></div>
+    <div class="admin-row"><span>Vie scolaire</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="viescolaire" checked><span class="track"></span></label></div>
+    <div class="admin-row"><span>Administration</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="administration" checked><span class="track"></span></label></div>
+    <div class="admin-row"><span>Entreprise</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="entreprise" checked><span class="track"></span></label></div>
+    <div class="admin-row"><span>Académie</span><label class="switch"><input type="checkbox" class="admin-toggle" data-space="academie" checked><span class="track"></span></label></div>
+  </div>
+</div>
+
+<!-- ===== SCRIPT ===== -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  // ===== CONFIGURATION FIREBASE — À REMPLACER =====
+  // Recherchez "COLLEZ_VOTRE" avec Ctrl+F pour trouver les 6 valeurs à remplacer.
+  const firebaseConfig = {
+    apiKey: "AIzaSyBRLiG9rRewYjyKj7iXqV1hDac0ZAKMYr8",
+    authDomain: "pageconnexion-pronote.firebaseapp.com",
+    projectId: "pageconnexion-pronote",
+    storageBucket: "pageconnexion-pronote.firebasestorage.app",
+    messagingSenderId: "823532302709",
+    appId: "1:823532302709:web:688964464b8d4cb1e8633c"
+  };
+
+  // ===== CODE ADMIN — recherchez "changeMoi2026" avec Ctrl+F pour le changer =====
+  const ADMIN_CODE = "changeMoi2026";
+
+  let db = null;
+  try {
+    const app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+  } catch (e) {
+    console.warn("Firebase non configuré :", e);
+  }
+
+  const STATUS_DOC = db ? doc(db, "cas", "spacesStatus") : null;
+  const spaces = document.querySelectorAll("[data-space]");
+
+  function applyStatus(status) {
+    spaces.forEach(card => {
+      const key = card.dataset.space;
+      const blocked = !!(status && status[key]);
+      card.classList.toggle("is-blocked", blocked);
+    });
+    document.querySelectorAll(".admin-toggle").forEach(t => {
+      const key = t.dataset.space;
+      t.checked = !(status && status[key]);
+    });
+  }
+
+  if (STATUS_DOC) {
+    onSnapshot(STATUS_DOC, (snap) => {
+      applyStatus(snap.exists() ? snap.data() : {});
+    }, (err) => console.warn("Lecture Firestore impossible :", err));
+  }
+
+  // Empêche l'ouverture d'un espace bloqué (sécurité supplémentaire au-delà du CSS)
+  spaces.forEach(card => {
+    card.addEventListener("click", (e) => {
+      if (card.classList.contains("is-blocked")) e.preventDefault();
+    });
+  });
+
+  // ===== PANNEAU ADMIN =====
+  const adminBtn = document.getElementById("adminBtn");
+  const adminPanel = document.getElementById("adminPanel");
+  const adminLogin = document.getElementById("adminLogin");
+  const adminControls = document.getElementById("adminControls");
+  const adminCodeInput = document.getElementById("adminCodeInput");
+  const adminCodeError = document.getElementById("adminCodeError");
+  let isAdmin = false;
+
+  adminBtn.addEventListener("click", () => adminPanel.classList.toggle("open"));
+
+  document.getElementById("adminCodeForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (adminCodeInput.value === ADMIN_CODE) {
+      isAdmin = true;
+      adminLogin.hidden = true;
+      adminControls.hidden = false;
+      adminCodeError.hidden = true;
+    } else {
+      adminCodeError.hidden = false;
+    }
+    adminCodeInput.value = "";
+  });
+
+  document.querySelectorAll(".admin-toggle").forEach(toggle => {
+    toggle.addEventListener("change", async () => {
+      if (!isAdmin) return;
+      if (!STATUS_DOC) { alert("Firebase n'est pas configuré : complétez firebaseConfig en haut du script."); return; }
+      const key = toggle.dataset.space;
+      try {
+        await setDoc(STATUS_DOC, { [key]: !toggle.checked }, { merge: true });
+      } catch (err) {
+        alert("Erreur d'écriture Firestore : vérifiez la configuration et les règles de sécurité.");
+        console.error(err);
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
