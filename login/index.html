@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Redirection — Pronote</title>
 <!-- Redirection automatique après 1,5s, avec lien de secours si JS/meta refresh désactivé -->
-<meta http-equiv="refresh" content="1.5;url=../">
+<meta http-equiv="refresh" content="1.5;url=/portail-pronote-/">
 <style>
   body {
     margin: 0;
@@ -37,11 +37,11 @@
   <div class="box">
     <div class="spinner"></div>
     <p>Redirection vers le portail…</p>
-    <p><a href="../">Cliquez ici si la page ne change pas automatiquement</a></p>
+    <p><a href="/portail-pronote-/">Cliquez ici si la page ne change pas automatiquement</a></p>
   </div>
   <script>
-    // Redirection JS en complément du meta refresh
-    window.location.replace("../");
+    // Redirection JS en complément du meta refresh (chemin absolu pour éviter tout souci de / final)
+    window.location.replace("/portail-pronote-/");
   </script>
 </body>
 </html>
